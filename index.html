@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>移动端轮播</title>
+    <script src="node_modules/zepto/src/zepto.js"></script>
+    <script src="js/touch.js"></script>
+</head>
+<style>
+    *{box-sizing: border-box}
+    body{
+        margin:0;padding:0;
+
+    }
+    html,body{
+        width:100%;height:100%;
+    }
+   .wheel{
+       width:100%;height:400px;
+       box-sizing: border-box;
+       border:1px solid #000;
+       overflow: hidden;
+   }
+    .box{
+        width:300%;height:100%;
+    }
+    a{
+        display: block;width:33.33%;height:100%;
+        float:left;
+    }
+</style>
+<body>
+    <div class="wheel">
+        <div class="box">
+            <a href="javascript:;" style="background:orangered">1</a>
+            <a href="javascript:;"  style="background:greenyellow">2</a>
+            <a href="javascript:;"  style="background:blueviolet">3</a>
+        </div>
+    </div>
+</body>
+<script>
+
+    var marginL=0;
+    var num = 0;
+    var width = $(".wheel").css("width");
+    touch.on("body","dragstart",".box",function(e){
+        $(".box").css({
+            transition:"none"
+        })
+        e.preventDefault();
+    });
+    touch.on("body","drag",".box",function(e){
+        $(".box").css({
+            marginLeft: marginL + e.x
+        });
+    });
+    touch.on("body","dragend",".box",function(e){
+        if(Math.abs(e.x)>100){
+            if(e.direction=="left"){
+                num++;
+                if(num>2){
+                    num=2;
+                }
+                $(".box").css({
+                    transition:"margin .3s ease",
+                    marginLeft:-num*parseInt(width)
+                });
+                marginL = -num*parseInt(width);
+            }else if(e.direction=="right"){
+                num--;
+                if(num<=0){
+                    num=0;
+                }
+                $(".box").css({
+                    transition:"margin .3s ease",
+                    marginLeft:-num*parseInt(width)
+                });
+                marginL = -num*parseInt(width);
+            }
+        }else if(Math.abs(e.x)<100){
+            $(".box").css({
+                transition:"margin .3s ease",
+                marginLeft:num*width
+            })
+        }
+    })
+
+</script>
+</html>
